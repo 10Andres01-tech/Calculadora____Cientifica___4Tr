@@ -139,6 +139,28 @@ let m = {
 
             break;
 
+            case "cientifico":
+
+                if (p.digito == "√") {
+
+                    let numero = parseFloat(p.operaciones.innerHTML);
+
+                    if (numero >= 0) {
+
+                        p.operaciones.innerHTML = Math.sqrt(numero);
+
+                    } else {
+
+                        p.operaciones.innerHTML = "Error";
+
+                    }
+
+                    p.resultado = true;
+
+                }
+
+            break;
+
             case "igual":
 
                 let resultado = eval(p.operaciones.innerHTML);
