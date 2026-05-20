@@ -7,6 +7,7 @@ let p = {
     cantisigno: 0,
     cantdecimal: false,
     resultado: false,
+
     potencia: false,
     basePotencia: 0
 };
@@ -23,7 +24,6 @@ let m = {
 
         p.borrar.addEventListener("click", m.borrarcalculadora);
 
-        
         document.addEventListener("keydown", m.teclado);
 
     },
@@ -37,7 +37,6 @@ let m = {
 
     },
 
-    
     teclado: function (evento) {
 
         let tecla = evento.key;
@@ -51,7 +50,12 @@ let m = {
         }
 
         
-        else if (tecla == "+" || tecla == "-" || tecla == "*" || tecla == "/") {
+        else if (
+            tecla == "+" ||
+            tecla == "-" ||
+            tecla == "*" ||
+            tecla == "/"
+        ) {
 
             p.digito = tecla;
             m.calculadora("simbolo");
@@ -63,6 +67,30 @@ let m = {
 
             p.digito = tecla;
             m.calculadora("decimal");
+
+        }
+
+        
+        else if (tecla == "^" || tecla == "p") {
+
+            p.digito = "^";
+            m.calculadora("cientifico");
+
+        }
+
+        
+        else if (tecla == "s") {
+
+            p.digito = "sin";
+            m.calculadora("cientifico");
+
+        }
+
+        
+        else if (tecla == "c") {
+
+            p.digito = "cos";
+            m.calculadora("cientifico");
 
         }
 
@@ -143,47 +171,28 @@ let m = {
 
             case "cientifico":
 
-                let numero = parseFloat(p.operaciones.innerHTML);
-
                 
                 if (p.digito == "√") {
 
-                    if (numero >= 0) {
-
-                        p.operaciones.innerHTML = Math.sqrt(numero);
-
-                    } else {
-
-                        p.operaciones.innerHTML = "Error";
-
-                    }
-
-                    p.resultado = true;
+                    p.operaciones.innerHTML = "√";
 
                 }
 
                 
                 else if (p.digito == "sin") {
 
-                    let radianes = numero * (Math.PI / 180);
-
-                    p.operaciones.innerHTML = Math.sin(radianes).toFixed(8);
-
-                    p.resultado = true;
+                    p.operaciones.innerHTML = "sin";
 
                 }
 
                 
                 else if (p.digito == "cos") {
 
-                    let radianes = numero * (Math.PI / 180);
-
-                    p.operaciones.innerHTML = Math.cos(radianes).toFixed(8);
-
-                    p.resultado = true;
+                    p.operaciones.innerHTML = "cos";
 
                 }
 
+                
                 else if (p.digito == "^") {
 
                     p.basePotencia = parseFloat(p.operaciones.innerHTML);
@@ -199,7 +208,44 @@ let m = {
             case "igual":
 
                 
-                if (p.potencia) {
+                if (p.operaciones.innerHTML.includes("sin")) {
+
+                    let numero = parseFloat(
+                        p.operaciones.innerHTML.replace("sin", "")
+                    );
+
+                    let radianes = numero * (Math.PI / 180);
+
+                    p.operaciones.innerHTML = Math.sin(radianes).toFixed(6);
+
+                }
+
+                
+                else if (p.operaciones.innerHTML.includes("cos")) {
+
+                    let numero = parseFloat(
+                        p.operaciones.innerHTML.replace("cos", "")
+                    );
+
+                    let radianes = numero * (Math.PI / 180);
+
+                    p.operaciones.innerHTML = Math.cos(radianes).toFixed(6);
+
+                }
+
+                
+                else if (p.operaciones.innerHTML.includes("√")) {
+
+                    let numero = parseFloat(
+                        p.operaciones.innerHTML.replace("√", "")
+                    );
+
+                    p.operaciones.innerHTML = Math.sqrt(numero);
+
+                }
+
+                
+                else if (p.potencia) {
 
                     let partes = p.operaciones.innerHTML.split("^");
 
@@ -217,18 +263,31 @@ let m = {
 
                     p.potencia = false;
 
-                } else {
+                }
 
-                    let resultado = eval(p.operaciones.innerHTML);
+                
+                else {
 
-                    
-                    if (resultado == Infinity || resultado == -Infinity) {
+                    try {
+
+                        let resultado = eval(p.operaciones.innerHTML);
+
+                        if (
+                            resultado == Infinity ||
+                            resultado == -Infinity
+                        ) {
+
+                            p.operaciones.innerHTML = "Error";
+
+                        } else {
+
+                            p.operaciones.innerHTML = resultado;
+
+                        }
+
+                    } catch {
 
                         p.operaciones.innerHTML = "Error";
-
-                    } else {
-
-                        p.operaciones.innerHTML = resultado;
 
                     }
 
@@ -244,6 +303,14 @@ let m = {
     borrarcalculadora: function () {
 
         p.operaciones.innerHTML = 0;
+
+        p.resultado = false;
+
+        p.cantisigno = 0;
+
+        p.cantdecimal = false;
+
+        p.potencia = false;
 
     }
 
