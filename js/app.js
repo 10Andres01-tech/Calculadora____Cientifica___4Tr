@@ -19,8 +19,10 @@ let m = {
 
         }
 
-
         p.borrar.addEventListener("click", m.borrarcalculadora);
+
+        
+        document.addEventListener("keydown", m.teclado);
 
     },
 
@@ -33,76 +35,118 @@ let m = {
 
     },
 
+    
+    teclado: function (evento) {
+
+        let tecla = evento.key;
+
+        
+        if (!isNaN(tecla)) {
+
+            p.digito = tecla;
+            m.calculadora("numero");
+
+        }
+
+        
+        else if (tecla == "+" || tecla == "-" || tecla == "*" || tecla == "/") {
+
+            p.digito = tecla;
+            m.calculadora("simbolo");
+
+        }
+
+        
+        else if (tecla == ".") {
+
+            p.digito = tecla;
+            m.calculadora("decimal");
+
+        }
+
+        
+        else if (tecla == "Enter") {
+
+            m.calculadora("igual");
+
+        }
+
+        
+        else if (tecla == "Backspace") {
+
+            m.borrarcalculadora();
+
+        }
+
+    },
+
     calculadora: function (accion) {
 
-switch (accion) {
+        switch (accion) {
 
-    case "numero":
+            case "numero":
 
-        p.cantisigno = 0;
+                p.cantisigno = 0;
 
-        if (p.resultado) {
+                if (p.resultado) {
 
-            p.resultado = false;
-            p.operaciones.innerHTML = p.digito;
+                    p.resultado = false;
+                    p.operaciones.innerHTML = p.digito;
 
-        } else {
+                } else {
 
-            if (p.operaciones.innerHTML == 0) {
+                    if (p.operaciones.innerHTML == 0) {
 
-                p.operaciones.innerHTML = p.digito;
+                        p.operaciones.innerHTML = p.digito;
 
-            } else {
+                    } else {
 
-                p.operaciones.innerHTML += p.digito;
+                        p.operaciones.innerHTML += p.digito;
 
-            }
+                    }
 
+                }
+
+            break;
+
+            case "simbolo":
+
+                p.cantisigno++;
+
+                if (p.cantisigno == 1) {
+
+                    if (p.operaciones.innerHTML != 0) {
+
+                        p.operaciones.innerHTML += p.digito;
+
+                        p.cantdecimal = false;
+
+                    }
+
+                }
+
+            break;
+
+            case "decimal":
+
+                if (!p.cantdecimal) {
+
+                    p.operaciones.innerHTML += p.digito;
+
+                    p.cantdecimal = true;
+
+                }
+
+            break;
+
+            case "igual":
+
+                p.operaciones.innerHTML = eval(p.operaciones.innerHTML);
+
+                p.resultado = true;
+
+            break;
         }
-
-    break;
-
-    case "simbolo":
-
-        p.cantisigno++;
-
-        
-        if (p.cantisigno == 1) {
-
-            if (p.operaciones.innerHTML != 0) {
-
-                p.operaciones.innerHTML += p.digito;
-
-                
-                p.cantdecimal = false;
-
-            }
-
-        }
-
-    break;
-
-    case "decimal":
-
-        
-        if (!p.cantdecimal) {
-
-            p.operaciones.innerHTML += p.digito;
-
-            p.cantdecimal = true;
-
-        }
-
-    break;
-
-    case "igual":
-
-        p.operaciones.innerHTML = eval(p.operaciones.innerHTML);
-
-        p.resultado = true;
-
-    break;
-}
 
     },
 
