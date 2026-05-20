@@ -141,9 +141,10 @@ let m = {
 
             case "cientifico":
 
-                if (p.digito == "√") {
+                let numero = parseFloat(p.operaciones.innerHTML);
 
-                    let numero = parseFloat(p.operaciones.innerHTML);
+                
+                if (p.digito == "√") {
 
                     if (numero >= 0) {
 
@@ -154,6 +155,28 @@ let m = {
                         p.operaciones.innerHTML = "Error";
 
                     }
+
+                    p.resultado = true;
+
+                }
+
+                
+                else if (p.digito == "sin") {
+
+                    let radianes = numero * (Math.PI / 180);
+
+                    p.operaciones.innerHTML = Math.sin(radianes).toFixed(8);
+
+                    p.resultado = true;
+
+                }
+
+                
+                else if (p.digito == "cos") {
+
+                    let radianes = numero * (Math.PI / 180);
+
+                    p.operaciones.innerHTML = Math.cos(radianes).toFixed(8);
 
                     p.resultado = true;
 
