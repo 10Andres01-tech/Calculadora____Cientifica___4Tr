@@ -6,7 +6,9 @@ let p = {
     borrar: document.querySelector("#borrar"),
     cantisigno: 0,
     cantdecimal: false,
-    resultado: false
+    resultado: false,
+    potencia: false,
+    basePotencia: 0
 };
 
 let m = {
@@ -182,20 +184,53 @@ let m = {
 
                 }
 
+                else if (p.digito == "^") {
+
+                    p.basePotencia = parseFloat(p.operaciones.innerHTML);
+
+                    p.operaciones.innerHTML += "^";
+
+                    p.potencia = true;
+
+                }
+
             break;
 
             case "igual":
 
-                let resultado = eval(p.operaciones.innerHTML);
-
                 
-                if (resultado == Infinity || resultado == -Infinity) {
+                if (p.potencia) {
 
-                    p.operaciones.innerHTML = "Error";
+                    let partes = p.operaciones.innerHTML.split("^");
+
+                    let exponente = parseInt(partes[1]);
+
+                    let resultado = 1;
+
+                    for (let i = 0; i < exponente; i++) {
+
+                        resultado = resultado * p.basePotencia;
+
+                    }
+
+                    p.operaciones.innerHTML = resultado;
+
+                    p.potencia = false;
 
                 } else {
 
-                    p.operaciones.innerHTML = resultado;
+                    let resultado = eval(p.operaciones.innerHTML);
+
+                    
+                    if (resultado == Infinity || resultado == -Infinity) {
+
+                        p.operaciones.innerHTML = "Error";
+
+                    } else {
+
+                        p.operaciones.innerHTML = resultado;
+
+                    }
 
                 }
 
