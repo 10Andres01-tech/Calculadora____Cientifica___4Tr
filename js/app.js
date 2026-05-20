@@ -35,35 +35,74 @@ let m = {
 
     calculadora: function (accion) {
 
-        switch (accion) {
+switch (accion) {
 
-            case "numero":
+    case "numero":
 
-                if (p.operaciones.innerHTML == 0) {
+        p.cantisigno = 0;
 
-                    p.operaciones.innerHTML = p.digito;
+        if (p.resultado) {
 
-                } else {
+            p.resultado = false;
+            p.operaciones.innerHTML = p.digito;
 
-                    p.operaciones.innerHTML += p.digito;
+        } else {
 
-                }
+            if (p.operaciones.innerHTML == 0) {
 
-            break;
+                p.operaciones.innerHTML = p.digito;
 
-            case "simbolo":
-            case "decimal":
+            } else {
 
                 p.operaciones.innerHTML += p.digito;
 
-            break;
+            }
 
-            case "igual":
-
-                p.operaciones.innerHTML = eval(p.operaciones.innerHTML);
-
-            break;
         }
+
+    break;
+
+    case "simbolo":
+
+        p.cantisigno++;
+
+        
+        if (p.cantisigno == 1) {
+
+            if (p.operaciones.innerHTML != 0) {
+
+                p.operaciones.innerHTML += p.digito;
+
+                
+                p.cantdecimal = false;
+
+            }
+
+        }
+
+    break;
+
+    case "decimal":
+
+        
+        if (!p.cantdecimal) {
+
+            p.operaciones.innerHTML += p.digito;
+
+            p.cantdecimal = true;
+
+        }
+
+    break;
+
+    case "igual":
+
+        p.operaciones.innerHTML = eval(p.operaciones.innerHTML);
+
+        p.resultado = true;
+
+    break;
+}
 
     },
 
